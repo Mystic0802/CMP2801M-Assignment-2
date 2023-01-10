@@ -4,9 +4,7 @@
 #include "Square.h"
 #include "Movable.h"
 
-#include <iostream>
 #include <string>
-#include <vector>
 
 using namespace std;
 using std::cout;

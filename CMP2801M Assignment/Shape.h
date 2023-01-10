@@ -8,6 +8,8 @@
 #include <iostream>
 #include <vector>
 #include <iomanip>
+#include <string>
+#include <sstream>
 
 class Shape
 {
@@ -16,14 +18,19 @@ protected:
 	double perimeter;
 	Point* leftTop;
 	std::vector<Point> points;
+	std::stringstream* shapePropertyOStream;
 public:
 	Shape() {
 		area = 0;
 		perimeter = 0;
 		leftTop = new Point();
+		std::stringstream ss;
+		ss << std::endl;
+		shapePropertyOStream = new std::stringstream(ss.str());
 	}
 	~Shape() {
 		delete leftTop;
+		delete shapePropertyOStream;
 	}
 	virtual void calculateArea() = 0;
 	virtual void calculatePerimeter() = 0;
@@ -34,7 +41,9 @@ public:
 		calculateArea();
 		calculatePerimeter();
 		calculatePoints();
+		updateShapePropertyOStream();
 	}
+	virtual void updateShapePropertyOStream() = 0;
 	// Declare the operator<< overload function as a friend of the Shape class.
 	friend std::ostream& operator<<(std::ostream& os, const Shape& shape);
 };
@@ -42,13 +51,14 @@ public:
 // Overload the << operator to print the shape's points, area & perimeter.
 std::ostream& operator<<(std::ostream& os, const Shape& shape)
 {
+	os << shape.shapePropertyOStream->str();
 	os << "Points[";
 	for (Point p : shape.points)
 	{
 		os << "(" << p.getX() << "," << p.getY() << ")";
 	}
 	os << "]\n";
-	os << std::setprecision(1) << "Area=" << shape.area << ", Perimeter=" << shape.perimeter << std::endl;
+	os << std::fixed << "Area=" << std::setprecision(1) << shape.area << ", Perimeter=" << shape.perimeter << std::endl;
 	return os;
 }
 

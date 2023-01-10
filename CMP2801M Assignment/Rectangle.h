@@ -15,6 +15,7 @@ public:
 		width = 0;
 		height = 0;
 		recalculateShape();
+		updateShapePropertyOStream();
 	}
 	
 	Rectangle(int x, int y, int h, int w) {
@@ -22,6 +23,14 @@ public:
 		height = h;
 		width = w;
 		recalculateShape();
+		updateShapePropertyOStream();
+	}
+
+	virtual void updateShapePropertyOStream() override
+	{
+		std::stringstream ss;
+		ss << "Rectangle[h=" << height << ",w=" << width << "]" << std::endl;
+		*shapePropertyOStream = std::stringstream(ss.str());
 	}
 	
 	// Rectangle implementation of Shape::calculateArea()
@@ -37,6 +46,7 @@ public:
 	// Rectangle implementation of Shape::calculatePoints()
 	// Calculates the 4 points of the rectangle. Stores in order: top left, top right, bottom right, bottom left.
 	virtual void calculatePoints() override {
+		points.clear();
 		int xPlusWidth = leftTop->getX() + width;
 		int yPlusHeight = leftTop->getY() + height;
 		
@@ -58,19 +68,7 @@ public:
 		height *= yScale;
 		recalculateShape();
 	}
-
-	// Declare the operator<< overload function as a friend of the Rectangle class
-	friend std::ostream& operator<<(std::ostream& os, const Rectangle& r);
 };
 
-// Overload the << operator to print the rectangle's exclusive details
-std::ostream& operator<<(std::ostream& os, const Rectangle& r)
-{
-	os << "Rectangle[h=" << r.height << ",w=" << r.width << "]\n";
-	Shape* shape = (Shape*)&r;
-	os << *shape;
-	shape = nullptr;
-	return os;
-}
 
 #endif // !RECTANGLE_H

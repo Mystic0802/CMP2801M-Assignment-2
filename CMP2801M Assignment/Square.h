@@ -13,12 +13,21 @@ public:
 	Square() {
 		edge = 0;
 		recalculateShape();
+		updateShapePropertyOStream();
 	}
 	
 	Square(int x, int y, int e) {
 		leftTop->setXY(x, y);
 		edge = e;
 		recalculateShape();
+		updateShapePropertyOStream();
+	}
+
+	virtual void updateShapePropertyOStream() override
+	{
+		std::stringstream ss;
+		ss << "Square[e=" << edge << "]" << std::endl;
+		*shapePropertyOStream = std::stringstream(ss.str());
 	}
 
 	// Square implementation of Shape::calculateArea()
@@ -34,6 +43,7 @@ public:
 	// Square implementation of Shape::calculatePoints()
 	// Calculates the 4 points of the square. Stores in order: top left, top right, bottom right, bottom left.
 	virtual void calculatePoints() override {
+		points.clear();
 		int xPlusEdge = leftTop->getX() + edge;
 		int yPlusEdge = leftTop->getY() + edge;
 
@@ -52,19 +62,8 @@ public:
 	// Square implementation of Movable::scale()
 	virtual void scale(int xScale, int yScale) override {
 		edge *= xScale;
+		recalculateShape();
 	}
-
-	// Declare the operator<< overload function as a friend of the Circle class
-	friend std::ostream& operator<<(std::ostream& os, const Square& s);
 };
-
-// Overload the << operator to print the square's exclusive details
-std::ostream& operator<<(std::ostream& os, const Square& s) {
-	os << "Square[e=" << s.edge << "]\n";
-	Shape* shape = (Shape*)&s;
-	os << *shape;
-	shape = nullptr;
- 	return os;
-}
 
 #endif // !SQUARE_H

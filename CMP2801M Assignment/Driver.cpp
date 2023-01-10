@@ -50,16 +50,19 @@ int main()
 
 		string command = parameters[0];
 		int x, y = 0;
-		try
+		if (parameters.size() >= 3)
 		{
-			x = stoi(parameters[1]);
-			y = stoi(parameters[2]);
+			try
+			{
+				x = stoi(parameters[1]);
+				y = stoi(parameters[2]);
+			}
+			catch (exception)
+			{
+				cout << "Invalid coordinate parameter entered" << endl;
+				continue;
+			};
 		}
-		catch (exception)
-		{
-			cout << "Invalid coordinate parameter entered" << endl;
-			continue;
-		};
 		
 		if (command.compare("addR") == 0) {
 
@@ -139,9 +142,19 @@ int main()
 				continue;
 			}
 
-			int shapeIndex = stoi(parameters[1]);
-			int xScale = stoi(parameters[2]);
-			int yScale = stoi(parameters[3]);
+			int shapeIndex, xScale, yScale = 0;
+
+			try
+			{
+				shapeIndex = stoi(parameters[1]) - 1;
+				xScale = stoi(parameters[2]);
+				yScale = stoi(parameters[3]);
+			}
+			catch (exception)
+			{
+				cout << "Invalid parameter given" << endl;
+				continue;
+			}
 
 			if (shapeIndex >= shapes.size())
 			{
@@ -161,9 +174,19 @@ int main()
 				continue;
 			}
 
-			int shapeIndex = stoi(parameters[1]) - 1;
-			int newX = stoi(parameters[2]);
-			int newY = stoi(parameters[3]);
+			int shapeIndex, newX, newY = 0;
+
+			try
+			{
+				shapeIndex = stoi(parameters[1]) - 1;
+				newX = stoi(parameters[2]);
+				newY = stoi(parameters[3]);
+			}
+			catch (exception)
+			{
+				cout << "Invalid parameter given" << endl;
+				continue;
+			}
 
 			if (shapeIndex >= shapes.size())
 			{
@@ -176,7 +199,7 @@ int main()
 			cout << *shapes[shapeIndex];
 		}
 		else if (command.compare("display") == 0) {
-		cout << "There are " << shapes.size() << " shapes stored.\n";
+			cout << "There are " << shapes.size() << " shapes stored.\n";
 			cout << "Displaying all shapes:" << endl;
 			for (Shape* s : shapes)
 			{
@@ -193,8 +216,7 @@ int main()
 		else if (command.compare("exit") == 0) {
 			continue;
 		}
-		else
-		{
+		else {
 			cout << "Unrecognised command" << endl;
 		}
 
